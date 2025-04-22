@@ -1,0 +1,41 @@
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 16px;
+}
+
+.custom-table th {
+    background-color: #03308bc9;
+    padding: 10px;
+    text-align: left;
+}
+
+.custom-table td {
+    padding: 10px;
+    border-bottom: 1px solid #cccccc93;
+}
+
+.custom-table tr:nth-child(even) {
+    background-color: #043c9698;
+}
+
+.custom-table tr:hover {
+    background-color: #0392929c;
+}
+
+/* Add these to the end of your style.css */
+.stDataFrame {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+[data-testid="stExpander"] {
+    margin-top: 1rem;
+    border: 1px solid #cccccc93;
+    border-radius: 8px;
+}
+
+[data-testid="stExpander"] .st-emotion-cache-1iy6z4h {
+    padding: 1rem;
+}
