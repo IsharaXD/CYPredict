@@ -1,13 +1,18 @@
 import streamlit as st
-from PIL import Image
-import pandas as pd
-import numpy as np
-import py3Dmol
-from stmol import showmol
+from streamlit_lottie import st_lottie
 import requests
-from rdkit import Chem
-from rdkit.Chem import Draw
+from PIL import Image
 import io
+import streamlit.components.v1 as components    
+import base64
+from navbar import inject_navbar
+
+
+def get_base64_image(img_path):
+    with open(img_path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
 
 # Set page configuration
 st.set_page_config(
@@ -17,298 +22,257 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for the entire app
+inject_navbar()
+# Custom CSS with card backgrounds using the new color scheme
 st.markdown("""
-<style>
-    :root {
-        --primary: #1d4ed8;
-        --secondary: #3b82f6;
-        --accent: #10b981;
-        --dark: #1e293b;
-        --light: #f8fafc;
-    }
-    
-    
-    
-    .feature-card {
-        border-radius: 12px;
-        padding: 1.5rem;
-        background: white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-        height: 100%;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-    }
-    
-    .tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 1rem;
-    }
-    
-    .tab {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        background: #e2e8f0;
-        cursor: pointer;
-    }
-    
-    .tab.active {
-        background: var(--primary);
-        
-    }
-    
-    .molecule-viewer {
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-    
-    .news-card {
-        border-radius: 12px;
-        padding: 1rem;
-        background: white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Header with logo and navigation
-st.markdown("""
-<div class="header">
-    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-        <div style="display: flex; align-items: center;">
-            <img src="https://proventainternational.com/wp-content/uploads/2023/08/a.lionsheart_Abstract_3d_render_of_different_molecules_relevant_63450679-4266-43d7-a85c-b64757216f26.png" alt="Logo" style="height: 50px;">
-            <h1 style="margin: 0; color: var(--primary);">CYP Predictor Pro</h1>
-        </div>
-        <div style="display: flex; gap: 20px;">
-            <a href="#features" style="text-decoration: none; color: var(--dark); font-weight: 500;">Features</a>
-            <a href="#predict" style="text-decoration: none; color: var(--dark); font-weight: 500;">Predict</a>
-            <a href="#learn" style="text-decoration: none; color: var(--dark); font-weight: 500;">Learn</a>
-            <a href="#about" style="text-decoration: none; color: var(--dark); font-weight: 500;">About</a>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Hero section with animated gradient background
-st.markdown("""
-<div style="
-    background: linear-gradient(135deg, #1d4ed8, #3b82f6, #10b981);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius: 12px;
-    margin: 1rem 0;
-    padding: 2rem;
-">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🧪 Next-Gen Drug Safety Prediction</h1>
-    <p style="font-size: 1.25rem; max-width: 700px; margin-bottom: 2rem;">
-        Advanced machine learning models to predict CYP450 enzyme inhibition with 92% accuracy.
-        Reduce animal testing and accelerate drug development.
-    </p>
-    <div style="display: flex; gap: 1rem;">
-        <button style="
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        ">Try Demo</button>
-        <button style="
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        ">Learn More</button>
-    </div>
-</div>
-
 <style>
     @keyframes gradient {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+    
+    .stat-card {
+        border-radius: 12px;
+        padding: 1.5rem;
+        color: white;
+        text-align: center;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        margin-bottom: 2rem; 
+    }
+            
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(107, 138, 71, 0.7); /* AQUA with 70% opacity */
+        z-index: 1;
+    }
+    
+    .stat-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .welfare-card {
+        border-radius: 12px;
+        padding: 4rem;
+        color: white;
+        margin: 2rem 0; /* Reduced margin to minimize gap */
+        background: linear-gradient(rgba(108, 100, 139, 0.8), rgba(0, 51, 102, 0.8)), /* LAVENDER and DARK BLUE gradient */
+                    url('https://aldf.org/wp-content/uploads/2018/05/rabbit-160495596-16x9.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .feature-card {
+        border-radius: 12px;
+        padding: 1.5rem;
+        color: white;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(107, 138, 71, 0.7); /* AQUA with 70% opacity */
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover::before {
+        background: rgba(107, 138, 71, 0.5); /* AQUA with 50% opacity */
+    }
+    
+    .feature-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* New color scheme classes */
+    .aqua-bg {
+        background-color: #057a6f;
+    }
+    
+    .lavender-bg {
+        background-color: #6C648B;
+    }
+    
+    .darkblue-bg {
+        background-color: #003366;
+    }
+    
+    /* Text colors */
+    .aqua-text {
+        color: #057a6f;
+    }
+    
+    .lavender-text {
+        color: #6C648B;
+    }
+    
+    .darkblue-text {
+        color: #003366;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# Interactive Molecule Viewer
-st.markdown("## 🔍 Interactive Molecule Explorer")
-smiles_input = st.text_input("Enter a SMILES string or drug name:", "CN1C=NC2=C1C(=O)N(C(=O)N2C)C")
+# Hero Section
+components.html(open("animated_header.html", "r").read(), height=400)
 
-def render_mol(smiles):
-    mol = Chem.MolFromSmiles(smiles)
-    if mol:
-        img = Draw.MolToImage(mol, size=(400, 300))
-        st.image(img, caption="2D Structure", use_column_width=True)
+# Stats Section with Background Images
+st.markdown("""
+### <span style="font-size: 2rem;">Why Choose CYP Predictor Pro?</span>
+""", unsafe_allow_html=True)
+cols = st.columns(4)
+stats = [
+    {
+        "value": "80+%", 
+        "label": "Prediction Accuracy",
+        "bg": "https://img.loigiaihay.com/picture/2024/0729/39-accuracy.jpg",
+        "color": "lavender"  # Using LAVENDER for this card
+    },
+    {
+        "value": "30,000+", 
+        "label": "Molecular Descriptors Analyzed",
+        "bg": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        "color": "aqua"  # Using AQUA for this card
+    },
+    {
+        "value": "<2s", 
+        "label": "Average Prediction Time per Compound",
+        "bg": "https://media.istockphoto.com/id/183876874/photo/hand-with-classic-stopwatch.jpg?s=612x612&w=0&k=20&c=lcebeVhj6sYwHZ6iBM_ph75sUPkb70E1HMv-GhguDMs=",
+        "color": "darkblue"  },
+    {
+        "value": "10+",	 
+        "label": "ML Algorithms Tested",
+        "bg": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        "color": "darkblue"  # Using SUNSHINE for this card
+    }
+]
+
+for i, stat in enumerate(stats):
+    with cols[i]:
+        color_map = {
+            "aqua": "#057a6f",
+            "lavender": "#6C648B",
+            "darkblue": "#003366"
+        }
+        color = color_map[stat["color"]]
         
-        # 3D visualization
-        try:
-            xyz = requests.get(f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/{smiles}/record/XYZ/?record_type=3d")
-            if xyz.status_code == 200:
-                view = py3Dmol.view(width=400, height=300)
-                view.addModel(xyz.text, 'xyz')
-                view.setStyle({'stick': {}, 'sphere': {'scale':0.25}})
-                view.zoomTo()
-                view.setBackgroundColor('0xeeeeee')
-                showmol(view, height=300, width=400)
-        except:
-            st.warning("3D structure not available. Showing 2D only.")
+        st.markdown(f"""
+        <div class="stat-card" style="background-image: url('{stat["bg"]}');">
+            <div class="stat-content" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                <h2 style="margin: 0; font-size: 2.5rem; line-height: 1.2;">{stat['value']}</h2>
+                <p style="margin: 1rem 0 0 0; font-size: 1.2rem; line-height: 1.5;">{stat['label']}</p>
+            </div>
+        </div>
+        <style>
+            .stat-card:nth-child({i+1})::before {{
+                background: rgba({int(color[1:3], 16)}, {int(color[3:5], 16)}, {int(color[5:7], 16)}, 0.7);
+            }}
+        </style>
+        """, unsafe_allow_html=True)
 
-if smiles_input:
-    render_mol(smiles_input)
-
-# Prediction Dashboard
-st.markdown("## 📊 Prediction Dashboard")
-tab1, tab2, tab3 = st.tabs(["Single Prediction", "Batch Prediction", "History"])
-
-with tab1:
-    st.markdown("### Predict CYP Inhibition for a Single Compound")
-    with st.form("single_prediction"):
-        col1, col2 = st.columns(2)
-        with col1:
-            compound_name = st.text_input("Compound Name", "Caffeine")
-            smiles = st.text_input("SMILES String", "CN1C=NC2=C1C(=O)N(C(=O)N2C)C")
-        with col2:
-            cyp_models = st.multiselect(
-                "Select CYP Models", 
-                ["CYP1A2", "CYP2C9", "CYP2C19", "CYP2D6", "CYP3A4"],
-                default=["CYP1A2", "CYP2C19", "CYP3A4"]
-            )
-            st.selectbox("Toxicity Model", ["Standard", "Advanced"])
-        
-        if st.form_submit_button("Run Prediction"):
-            # Simulate prediction results
-            results = {
-                "CYP1A2": {"prediction": "Inhibitor", "probability": 0.87, "confidence": "High"},
-                "CYP2C19": {"prediction": "Non-Inhibitor", "probability": 0.12, "confidence": "Low"},
-                "CYP3A4": {"prediction": "Non-Inhibitor", "probability": 0.23, "confidence": "Low"}
-            }
-            
-            st.success("Prediction completed successfully!")
-            
-            # Display results in cards
-            cols = st.columns(len(results))
-            for i, (cyp, data) in enumerate(results.items()):
-                with cols[i]:
-                    st.markdown(f"""
-                    <div class="feature-card">
-                        <h3>{cyp}</h3>
-                        <p><strong>Prediction:</strong> {data['prediction']}</p>
-                        <p><strong>Probability:</strong> {data['probability']:.2f}</p>
-                        <p><strong>Confidence:</strong> {data['confidence']}</p>
+# Animal Welfare Section with Background
+try:
+    rabbit_base64 = get_base64_image('rabbit.png')
+    welfare_html = f"""
+    <div class="welfare-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="flex: 2; display: flex; flex-direction: column; justify-content: center;">
+                <h2 style="color: white; margin-bottom: 2rem; font-size: 2rem; line-height: 1.5;">🐾 Saving Animal Lives Through Innovation</h2>
+                <p style="color: white; margin-bottom: 1.5rem; font-size: 1.2rem; line-height: 1.8;">
+                    CYPredict is built to reduce reliance on animal testing in drug development by providing accurate, 
+                    AI-driven predictions for liver enzyme interactions. Our mission is to empower students, educators, and researchers with tools that prioritize safety, accessibility, and compassion.
+                </p>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; flex: 1;">
+                        <p style="margin: 0; font-weight: bold; font-size: 1.1rem;">Reinventing early-stage drug testing</p>
+                        <p style="margin: 0; font-size: 1rem; line-height: 1.5;">With data, not animals</p>
                     </div>
-                    """, unsafe_allow_html=True)
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; flex: 1; ">
+                        <p style="margin: 0; font-weight: bold; font-size: 1.1rem;">A learning lab for students, educators, and future pharmacologists</p>
+                        <p style="margin: 0; font-size: 1rem; line-height: 1.5;">where science meets empathy</p>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 1; display: flex; justify-content: center;">
+                <img src="data:image/png;base64,{rabbit_base64}" width="300">
+            </div>
+        </div>
+    </div>
+    """
+    st.markdown(welfare_html, unsafe_allow_html=True)
+except Exception as e:
+    st.error(f"Could not load rabbit image: {str(e)}")
+    # Fallback to emoji
+    st.markdown("""
+    <div class="welfare-card">
+        <h2 style="color: white; margin-bottom: 1rem; font-size: 2rem; line-height: 1.5;">🐾 Saving Animal Lives Through Innovation 🐇</h2>
+        <!-- rest of the content -->
+    </div>
+    """, unsafe_allow_html=True)
 
-# Features Section
-st.markdown("## ✨ Key Features", anchor="features")
+# Features Section with Background Images
+st.markdown("## ✨ Key Features")
 features = [
     {
         "title": "Advanced Visualization",
         "description": "Interactive 2D/3D molecule viewer with rotation and zoom capabilities",
-        "icon": "🧬"
+        "icon": "🧬",
+        "bg": "https://proventainternational.com/wp-content/uploads/2023/08/a.lionsheart_Abstract_3d_render_of_different_molecules_relevant_63450679-4266-43d7-a85c-b64757216f26-1024x683.png",
+        "color": "darkblue"  # Using DUSTYROSE for this card
     },
     {
         "title": "Multi-Model Prediction",
         "description": "Predict inhibition for all major CYP450 enzymes simultaneously",
-        "icon": "🤖"
+        "icon": "🤖",
+        "bg": "https://media.springernature.com/lw900/springer-cms/rest/v1/content/26808036/data/v3",
+        "color": "lavender"  # Using LAVENDER for this card
     },
     {
         "title": "Batch Processing",
-        "description": "Upload CSV files with multiple compounds for high-throughput screening",
-        "icon": "📊"
-    },
-    {
-        "title": "Toxicity Screening",
-        "description": "Additional toxicity endpoints beyond CYP inhibition",
-        "icon": "⚠️"
-    },
-    {
-        "title": "API Access",
-        "description": "Integrate predictions directly into your workflow with our REST API",
-        "icon": "🔌"
-    },
-    {
-        "title": "Export Results",
-        "description": "Download comprehensive reports in PDF, CSV, or JSON formats",
-        "icon": "💾"
+        "description": "Upload files with multiple compounds for high-throughput screening",
+        "icon": "📊",
+        "bg": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        "color": "darkblue"  # Using SUNSHINE for this card
     }
 ]
 
 cols = st.columns(3)
 for i, feature in enumerate(features):
-    with cols[i % 3]:
+    with cols[i]:
         st.markdown(f"""
-        <div class="feature-card">
-            <div style="font-size: 2rem; margin-bottom: 1rem;">{feature['icon']}</div>
-            <h3>{feature['title']}</h3>
-            <p>{feature['description']}</p>
+        <div class="feature-card" style="background-image: url('{feature["bg"]}');">
+            <div class="feature-content">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">{feature['icon']}</div>
+                <h3 style="margin-bottom: 0.5rem;">{feature['title']}</h3>
+                <p style="line-height: 1.5;">{feature['description']}</p>
+            </div>
         </div>
+        <style>
+            .feature-card:nth-child({i+1})::before {{
+                background: rgba(0, 0, 0, 0.5); /* Default shade */
+            }}
+            .feature-card:nth-child({i+1}):hover::before {{
+                background: none; /* Remove shade on hover */
+            }}
+        </style>
         """, unsafe_allow_html=True)
-
-# Latest Research Section
-st.markdown("## 📚 Latest Research", anchor="learn")
-research = [
-    {
-        "title": "Advances in CYP450 Prediction Models",
-        "source": "Nature Drug Discovery",
-        "date": "2023-06-15"
-    },
-    {
-        "title": "Reducing Animal Testing with In Silico Methods",
-        "source": "Journal of Pharmacology",
-        "date": "2023-05-22"
-    },
-    {
-        "title": "Case Study: Predicting Drug-Drug Interactions",
-        "source": "Clinical Pharmacokinetics",
-        "date": "2023-04-10"
-    }
-]
-
-for item in research:
-    with st.expander(f"{item['title']} - {item['source']}"):
-        st.write(f"Published: {item['date']}")
-        st.write("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris...")
-        st.button("Read More", key=f"btn_{item['title']}")
-
-# About Section
-st.markdown("## ℹ️ About CYP Predictor Pro", anchor="about")
-st.write("""
-CYP Predictor Pro is an advanced computational platform developed by a team of pharmacologists, 
-data scientists, and software engineers. Our mission is to provide accurate, accessible tools 
-for predicting drug metabolism and interactions while reducing reliance on animal testing.
-
-**Key Benefits:**
-- 92% prediction accuracy across major CYP450 enzymes
-- User-friendly interface for researchers at all levels
-- Cloud-based solution with no installation required
-- Regular model updates based on latest research
-""")
-
-# Footer
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; padding: 1rem; color: var(--dark);">
-    <p>© 2023 CYP Predictor Pro | <a href="#" style="color: var(--primary);">Terms</a> | <a href="#" style="color: var(--primary);">Privacy</a> | <a href="#" style="color: var(--primary);">Contact</a></p>
-</div>
-""", unsafe_allow_html=True)

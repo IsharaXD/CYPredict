@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .large-header {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1d4ed8, #ab3bf6, #10b981);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      overflow: hidden;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow for better effect */
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    canvas {
+      position: absolute;
+      display: block;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .main-title {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3em;
+      color: white;
+      z-index: 2;
+      text-align: center;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0); /* Shadow fades away by setting opacity to 0 */
+    </style>
+  </head>
+  <body>
+      <div class="large-header"></div>
+      <canvas id="demo-canvas"></canvas>
+      <div class="main-title" style="font-family: 'Poppins', sans-serif;"></div>
+    <div class="large-header"></div>
+    <canvas id="demo-canvas"></canvas>
+    <div class="main-title" style="font-family: 'Poppins', sans-serif;">
+    <span style="white-space: nowrap;">CYPredict: AI-Powered, Life-Friendly Drug Discovery</span>
+    <br>
+    <span style="font-size: 0.4em; font-weight: normal; font-style: italic;">
+        Every prediction replaces a life. Every molecule visualized saves a soul.
+    </span>
+    <br>
+    <button style="
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: transparent; /* No fill color */
+    border: 2px solid white; /* White border */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+" 
+onmouseover="this.style.backgroundColor='white'; this.style.color='#000000';" 
+onmouseout="this.style.backgroundColor='transparent'; this.style.color='white';">
+    Start Predict
+</button>
+</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenLite.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/easing/EasePack.min.js"></script>
+  <script>
+    (function () {
+      var width, height, canvas, ctx, points, target = {}, animateHeader = true;
+
+      initHeader();
+      initAnimation();
+      addListeners();
+
+      function initHeader() {
+        width = window.innerWidth;
+        height = 400;
+        target.x = width / 2;
+        target.y = height / 2;
+
+        canvas = document.getElementById('demo-canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
+
+        points = [];
+        for (var x = 0; x < width; x += width / 20) {
+          for (var y = 0; y < height; y += height / 20) {
+            var px = x + Math.random() * width / 20;
+            var py = y + Math.random() * height / 20;
+            var p = { x: px, originX: px, y: py, originY: py };
+            points.push(p);
+          }
+        }
+
+        for (var i = 0; i < points.length; i++) {
+          var closest = [];
+          var p1 = points[i];
+          for (var j = 0; j < points.length; j++) {
+            var p2 = points[j];
+            if (!(p1 === p2)) {
+              var placed = false;
+              for (var k = 0; k < 5; k++) {
+                if (!placed) {
+                  if (closest[k] === undefined) {
+                    closest[k] = p2;
+                    placed = true;
+                  }
+                }
+              }
+
+              for (var k = 0; k < 5; k++) {
+                if (!placed && getDistance(p1, p2) < getDistance(p1, closest[k])) {
+                  closest[k] = p2;
+                  placed = true;
+                }
+              }
+            }
+          }
+          p1.closest = closest;
+        }
+
+        for (var i in points) {
+          points[i].circle = new Circle(points[i], 2 + Math.random() * 2, 'rgba(255,255,255,0.3)');
+        }
+      }
+
+      function addListeners() {
+        if (!('ontouchstart' in window)) {
+          window.addEventListener('mousemove', mouseMove);
+        }
+        window.addEventListener('resize', resize);
+      }
+
+      function mouseMove(e) {
+        target.x = e.pageX;
+        target.y = e.pageY;
+      }
+
+      function resize() {
+        width = window.innerWidth;
+        canvas.width = width;
+      }
+
+      function initAnimation() {
+        animate();
+        for (var i in points) {
+          shiftPoint(points[i]);
+        }
+      }
+
+      function animate() {
+        if (animateHeader) {
+            ctx.clearRect(0, 0, width, height);
+            for (var i in points) {
+                if (Math.abs(getDistance(target, points[i])) < 20000) { // Increased from 4000
+                    points[i].active = 0.3;
+                    points[i].circle.active = 0.6;
+                } else if (Math.abs(getDistance(target, points[i])) < 60000) { // Increased from 20000
+                    points[i].active = 0.1;
+                    points[i].circle.active = 0.3;
+                } else if (Math.abs(getDistance(target, points[i])) < 100000) { // Increased from 40000
+                    points[i].active = 0.02;
+                    points[i].circle.active = 0.1;
+                } else {
+                    points[i].active = 0;
+                    points[i].circle.active = 0;
+                }
+
+                drawLines(points[i]);
+                points[i].circle.draw();
+            }
+        }
+        requestAnimationFrame(animate);
+      }
+
+      function shiftPoint(p) {
+        TweenLite.to(p, 1 + 1 * Math.random(), {
+          x: p.originX - 50 + Math.random() * 100,
+          y: p.originY - 50 + Math.random() * 100,
+          ease: Circ.easeInOut,
+          onComplete: function () {
+            shiftPoint(p);
+          }
+        });
+      }
+
+      function drawLines(p) {
+        if (!p.active) return;
+        for (var i in p.closest) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.closest[i].x, p.closest[i].y);
+          ctx.strokeStyle = 'rgba(255, 255, 255,' + p.active + ')';
+          ctx.stroke();
+        }
+      }
+
+      function Circle(pos, rad, color) {
+        this.pos = pos;
+        this.radius = rad;
+        this.color = color;
+        this.draw = function () {
+          if (!this.active) return;
+          ctx.beginPath();
+          ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI, false);
+          ctx.fillStyle = 'rgba(255, 255, 255,' + this.active + ')';
+          ctx.fill();
+        };
+      }
+
+      function getDistance(p1, p2) {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+      }
+    })();
+  </script>
+</body>
+</html>

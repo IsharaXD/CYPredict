@@ -5,6 +5,7 @@ import pandas as pd
 import joblib
 import numpy as np
 from functools import lru_cache
+from navbar import inject_navbar
 
 # ================== Setup ==================
 st.set_page_config(
@@ -13,6 +14,7 @@ st.set_page_config(
     layout="wide"
 )
 
+inject_navbar()
 # Custom CSS for three-column results
 st.markdown("""
 <style>
