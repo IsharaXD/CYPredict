@@ -471,8 +471,8 @@ def main():
                 
                 # Summary and download
                 if results:
+                    st.markdown("<br>", unsafe_allow_html=True)  # Add space above the box
                     st.success(f"✅ Successfully predicted {len(results)} molecules")
-                    
                     # Create two tabs for different views
                     tab1, tab2 = st.tabs(["📊 Summary Table", "💾 Download Options"])
                     
