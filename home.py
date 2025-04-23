@@ -192,7 +192,7 @@ for i, stat in enumerate(stats):
 
 # Animal Welfare Section with Background
 try:
-    rabbit_base64 = get_base64_image('rabbit.png')
+    rabbit_base64 = get_base64_image('images/rabbit.png')
     welfare_html = f"""
     <div class="welfare-card">
         <div style="display: flex; align-items: center; justify-content: space-between;">

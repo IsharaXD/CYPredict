@@ -11,7 +11,7 @@ def get_base64_image(img_path):
         return None
 
 def inject_navbar():
-    logo_path = "vaccine.png"  # Ensure the path is correct
+    logo_path = "images/vaccine.png"  # Ensure the path is correct
     logo_data = get_base64_image(logo_path)
 
     # Remove the default white background and padding

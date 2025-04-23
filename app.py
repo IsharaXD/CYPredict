@@ -226,16 +226,16 @@ def calculate_descriptors(smiles_text):
 def load_models():
     try:
         # CYP1A2 Model
-        cyp1a2_model = joblib.load('cyp1a2_xgboost.joblib')
-        cyp1a2_features = joblib.load('padel_feature_names.pkl')
+        cyp1a2_model = joblib.load('models/cyp1a2_xgboost.joblib')
+        cyp1a2_features = joblib.load('pkl/padel_feature_names.pkl')
         
         # CYP2C19 Model
-        cyp2c19_model = joblib.load('cyp2c19_xgboost.joblib')
-        cyp2c19_features = joblib.load('padel_selected_features2c19.pkl')
+        cyp2c19_model = joblib.load('models/cyp2c19_xgboost.joblib')
+        cyp2c19_features = joblib.load('pkl/padel_selected_features2c19.pkl')
         
         # CYP3A4 Model
-        cyp3a4_model = joblib.load('cyp3a4_xgboost.joblib')
-        cyp3a4_features = joblib.load('padel_selected_features3a4.pkl')
+        cyp3a4_model = joblib.load('models/cyp3a4_xgboost.joblib')
+        cyp3a4_features = joblib.load('pkl/padel_selected_features3a4.pkl')
         
         return {
             'cyp1a2': {
