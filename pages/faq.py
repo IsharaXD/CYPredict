@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_extras.let_it_rain import rain  # type: ignore
+from app import show_navbar
 
 
 
@@ -9,6 +10,11 @@ st.set_page_config(
     page_icon="❓",
     layout="wide"
 )
+
+# Verify correct page is loaded
+
+# Then your navbar and content
+selected = show_navbar()
 
 # Custom CSS
 st.markdown("""

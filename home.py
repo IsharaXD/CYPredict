@@ -5,7 +5,7 @@ from PIL import Image
 import io
 import streamlit.components.v1 as components    
 import base64
-from navbar import inject_navbar
+from app import show_navbar
 
 
 def get_base64_image(img_path):
@@ -16,13 +16,16 @@ def get_base64_image(img_path):
 
 # Set page configuration
 st.set_page_config(
-    page_title="CYP Predictor Pro",
+    page_title="CYP Predictor",
     page_icon="🧪",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed",
 )
 
-inject_navbar()
+selected = show_navbar()
+
+# show_navbar() function is not defined. Uncomment and define it if needed.
+# show_navbar()
 # Custom CSS with card backgrounds using the new color scheme
 st.markdown("""
 <style>
