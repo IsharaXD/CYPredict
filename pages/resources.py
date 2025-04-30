@@ -82,6 +82,7 @@ st.markdown("""
         text-align: center; /* Center the header */
     }
     
+    
     /* Resource cards */
     .resource-card {
         border-radius: 12px;
@@ -155,6 +156,7 @@ st.markdown("""
         width: 100%;
         height: 100%;
     }
+    
 </style>
 """, unsafe_allow_html=True)
 

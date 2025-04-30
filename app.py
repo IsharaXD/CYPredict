@@ -35,7 +35,6 @@ def show_navbar():
             align-items: center;
             margin-top: -20px;
             padding: 0.8rem 3rem;
-            background-color: white;
             position: sticky;  /* Changed from fixed to sticky */
             top: 0;  /* Stick to top when scrolling */
             z-index: 1000;
@@ -101,9 +100,9 @@ def show_navbar():
         <div class="nav-links">
             <a href="/" class="nav-link" target="_self">Home</a>
             <a href="/predictions" class="nav-link" target="_self">Predict</a>
-            <a href="/Models" class="nav-link" target="_self">Models</a>
             <a href="/resources" class="nav-link" target="_self">Resources</a>
             <a href="/faq" class="nav-link" target="_self">FAQ</a>
+            <a href="/aboutus" class="nav-link" target="_self">About us</a>
         </div>
     </div>
     """, unsafe_allow_html=True)
