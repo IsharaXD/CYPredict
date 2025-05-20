@@ -86,7 +86,7 @@ faqs = [
     },
     {
         "question": "What input formats does the tool accept?",
-        "answer": "You can input compounds as:<br>- SMILES strings<br>- SDF files<br>- CSV/Excel files with molecular structures<br>- Draw molecules directly in our chemical sketcher"
+        "answer": "You can input compounds as:<br>- SMILES strings with molecular structures"
     },
     {
         "question": "Is there a limit to the number of compounds I can analyze?",
@@ -94,7 +94,7 @@ faqs = [
     },
     {
         "question": "What machine learning models are used?",
-        "answer": "We employ an ensemble of models including:<br>- Random Forest<br>- XGBoost<br>- Graph Neural Networks<br>- Deep Neural Networks<br>Each model is optimized for specific CYP isoforms."
+        "answer": "We employ an ensemble of models including:<br>- Random Forest<br>- XGBoost<br>- SVM <br>Each model is optimized for specific CYP isoforms."
     },
     {
         "question": "How does this tool reduce animal testing?",
@@ -105,25 +105,8 @@ faqs = [
         "answer": "Absolutely! We offer special academic licenses and classroom packages. Contact us at education@cyppredictor.com for more information."
     },
     {
-        "question": "How do I cite CYP Predictor Pro?",
-        "answer": "Please cite our preprint:<br><em>Smith J, et al. (2023). 'CYP Predictor Pro: An AI Platform for Cytochrome P450 Inhibition Prediction'. bioRxiv.</em>"
-    },
-    {
-        "question": "Is my data secure and private?",
-        "answer": "All calculations are performed locally in your browser. For batch processing, uploaded files are encrypted and automatically deleted after 24 hours."
-    },
-    {
-        "question": "What's the difference between free and premium versions?",
-        "answer": """
-        <table>
-            <tr><th>Feature</th><th>Free</th><th>Premium</th></tr>
-            <tr><td>Compounds per batch</td><td>10</td><td>1,000</td></tr>
-            <tr><td>Prediction speed</td><td>Standard</td><td>Priority</td></tr>
-            <tr><td>3D visualization</td><td>❌</td><td>✅</td></tr>
-            <tr><td>API access</td><td>❌</td><td>✅</td></tr>
-            <tr><td>Export formats</td><td>CSV</td><td>CSV, SDF, PDF</td></tr>
-        </table>
-        """
+        "question": "How do I contact support?",
+        "answer": "For any questions or issues, please reach out to our support team. Info below"
     }
 ]
 
@@ -141,7 +124,7 @@ st.markdown("""
 ---
 ### Still have questions?
 
-<div style="background-color:#027a5e; padding: 1.5rem; border-radius: 8px;">
+<div style="background-color:#fcecc0; padding: 1.5rem; border-radius: 8px;">
     <p>Contact our support team:</p>
     <p>📧 <strong>Email:</strong> support@cyppredictor.com</p>
     <p>🐦 <strong>Twitter:</strong> @CYPPredictor</p>

@@ -1,8 +1,11 @@
 import streamlit as st
 from app import show_navbar
 
+
 # ========== PAGE CONFIG ==========
 st.set_page_config(layout="wide")  # Wide layout
+
+
 
 # ========== RESOURCE DATABASE ==========
 ARTICLES = [

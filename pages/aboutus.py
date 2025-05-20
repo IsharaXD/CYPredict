@@ -3,6 +3,7 @@ from PIL import Image
 import os
 from app import show_navbar
 
+
 # Custom CSS with expanded layout
 st.set_page_config(layout="wide")
 st.markdown("""
@@ -195,19 +196,19 @@ def about_page():
     I'm always open to collaboration or conversation about bioinformatics, machine learning, or ethical tech.
     </p>
     <div style='display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;'>
-    <a href="https://linkedin.com/in/yourprofile" target="_blank" style='text-decoration:none; color:inherit;'>
+    <a href="https://lk.linkedin.com/in/ishara-pallawattha" target="_blank" style='text-decoration:none; color:inherit;'>
     <div class="contact-card" style='width:200px;'>
     <i class="fab fa-linkedin social-icon"></i>
     <h4>LinkedIn</h4>
     </div>
     </a>
-    <a href="https://github.com/yourprofile" target="_blank" style='text-decoration:none; color:inherit;'>
+    <a href="https://github.com/IsharaXD" target="_blank" style='text-decoration:none; color:inherit;'>
     <div class="contact-card" style='width:200px;'>
     <i class="fab fa-github social-icon"></i>
     <h4>GitHub</h4>
     </div>
     </a>
-    <a href="mailto:your@email.com" style='text-decoration:none; color:inherit;'>
+    <a href="mailto:isharapallawattha@gmail.com" style='text-decoration:none; color:inherit;'>
     <div class="contact-card" style='width:200px;'>
     <i class="fas fa-envelope social-icon"></i>
     <h4>Email</h4>
