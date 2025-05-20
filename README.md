@@ -1,8 +1,10 @@
+![header](https://github.com/user-attachments/assets/83fcf878-0343-44bd-9542-173f2d4b2da0)
+
 # CYPredict
 
 **CYPredict** is a machine learning-based web application that predicts whether drug-like molecules inhibit cytochrome P450 (CYP450) enzymes using machine learning models. It is designed to support students and researchers in understanding drug metabolism, and aims to reduce the need for animal testing in early drug development.
 
-(images/header.png)
+
 
 
 ## Features
