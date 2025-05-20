@@ -19,18 +19,26 @@
 
 
 
-## 🧪 Installation
+## Installation
 
 ### 1. Clone the Repository
+
+### 2. Set Up the Environment
 
 ```bash
 conda create --name cyp_pred python=3.8
 conda activate cyp_pred
+```
 
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
-
+```
+### 4. Run the App
+```bash
 conda activate cyp_pred
 streamlit run home.py
+```
 
 
 
