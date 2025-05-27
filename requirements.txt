@@ -40,7 +40,7 @@ freetype-py @ file:///home/conda/feedstock_root/build_artifacts/freetype-py_1650
 gitdb @ file:///home/conda/feedstock_root/build_artifacts/gitdb_1735887193964/work
 GitPython @ file:///home/conda/feedstock_root/build_artifacts/gitpython_1735929639977/work
 greenlet @ file:///D:/bld/greenlet_1734532809956/work
-h11==0.14.0
+h11>=0.16.0
 h2 @ file:///home/conda/feedstock_root/build_artifacts/h2_1738578511449/work
 hpack @ file:///home/conda/feedstock_root/build_artifacts/hpack_1737618293087/work
 htbuilder==0.9.0
